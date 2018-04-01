@@ -1,5 +1,6 @@
 lazy val telegramBot = (project in file("."))
   .enablePlugins(DockerPlugin)
+  .dependsOn(Dependencies.telegramApiProject)
   .settings(
     name := "telegram-bot",
     organization := "com.kgribov",
