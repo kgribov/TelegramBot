@@ -1,11 +1,11 @@
 lazy val telegramBot = (project in file("."))
   .enablePlugins(DockerPlugin)
-  .dependsOn(Dependencies.telegramApiProject)
   .settings(
     name := "telegram-bot",
     organization := "com.kgribov",
     version := "0.1",
     scalaVersion := "2.12.4",
+    resolvers += "jitpack" at "https://jitpack.io",
     libraryDependencies ++= Dependencies.dependencies,
     mainClass in assembly := Some("com.kgribov.telegram.Main"),
     assemblyMergeStrategy in assembly := {

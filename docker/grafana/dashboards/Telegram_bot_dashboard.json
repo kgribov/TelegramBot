@@ -94,17 +94,17 @@
         {
           "refCount": 0,
           "refId": "A",
-          "target": "alias(summarize(telegram.bot.*.metric_new_messages.sum, '10s', 'sum', false), 'New messages')"
+          "target": "alias(summarize(telegram.bot.*.metric_new_messages.sum, '20s', 'sum', false), 'New messages')"
         },
         {
           "refCount": 0,
           "refId": "B",
-          "target": "alias(summarize(telegram.bot.*.metric_process_messages.sum, '10s', 'sum', false), 'Processed messages')"
+          "target": "alias(summarize(telegram.bot.*.metric_process_messages.sum, '20s', 'sum', false), 'Processed messages')"
         },
         {
           "refCount": 0,
           "refId": "C",
-          "target": "alias(summarize(telegram.bot.*.metric_received_batch_size.sum, '10s', 'sum', false), 'New updates')"
+          "target": "alias(summarize(telegram.bot.*.metric_received_batch_size.sum, '20s', 'sum', false), 'New updates')"
         }
       ],
       "thresholds": [],
@@ -219,7 +219,7 @@
           "value": "null"
         }
       ],
-      "valueName": "avg"
+      "valueName": "current"
     },
     {
       "cacheTimeout": null,
@@ -297,7 +297,7 @@
           "value": "null"
         }
       ],
-      "valueName": "avg"
+      "valueName": "current"
     },
     {
       "cacheTimeout": null,
@@ -361,7 +361,7 @@
       "targets": [
         {
           "refId": "A",
-          "target": "alias(summarize(telegram.bot.*.metric_active_dialogs.max, '10s', 'max', 'false'), 'Active dialogs')"
+          "target": "alias(summarize(telegram.bot.*.metric_active_dialogs.max, '20s', 'max', 'false'), 'Active dialogs')"
         }
       ],
       "thresholds": "",
@@ -375,7 +375,7 @@
           "value": "null"
         }
       ],
-      "valueName": "avg"
+      "valueName": "current"
     },
     {
       "aliasColors": {},
@@ -415,7 +415,7 @@
       "targets": [
         {
           "refId": "A",
-          "target": "alias(summarize(telegram.bot.*.metric_active_dialogs.max, '10s', 'max', false), 'Active dialogs')"
+          "target": "alias(summarize(telegram.bot.*.metric_active_dialogs.max, '20s', 'max', false), 'Active dialogs')"
         }
       ],
       "thresholds": [],
@@ -493,12 +493,12 @@
         {
           "refCount": 0,
           "refId": "A",
-          "target": "alias(derivative(summarize(telegram.bot.*.fail_to_load.count, '10s', 'sum', false)), 'Fail to load messages')"
+          "target": "alias(keepLastValue(derivative(summarize(telegram.bot.*.fail_to_load.count, '20s', 'sum', 'false')), 2), 'Fail to load messages')"
         },
         {
           "refCount": 0,
           "refId": "B",
-          "target": "alias(summarize(telegram.bot.*.metric_unable_send_try_count.max, '10s', 'max', 'false'), 'Tries to send messages')"
+          "target": "alias(keepLastValue(summarize(telegram.bot.*.metric_unable_send_try_count.max, '20s', 'max', false), 2), 'Tries to send messages')"
         }
       ],
       "thresholds": [],
