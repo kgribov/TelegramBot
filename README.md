@@ -29,7 +29,7 @@ You can type something to him and he will calculate your message size or type `/
 
 Open bot dashboard [Bot Dashboard](http://localhost:9999/d/bots/telegram-bot-dashboard?refresh=10s&orgId=1) to see metrics of your bot.
 
-> If you don't see any data on dashboard, no panic! Give some time to system to fully start-up (like 1-2 minutes).
+> If you don't see any data on dashboard, don't panic! Give some time to system to fully start-up (like 1-2 minutes).
 
 ## Creating your bot in Telegram
 
@@ -42,4 +42,23 @@ Don't forget to disable privacy rules for your bot, to read all messages in chat
 If you want to implement your own message processing, your own commands and dialogs with bot, open and modify class `CreateBotSchema`.
 To discover all bot Scala API features, read documentation in Scala API repo: [API features](https://github.com/kgribov/TelegramBotScalaApi#api-features)
 
+## Logging
+
+All logs of your bot you can find in directory `docker/logs`
+
 ## Monitoring
+
+With your bot, in docker we start next services: `Logstash`, `Graphite`, `Grafana`.
+
+**Logstash** post metrics from logs to **Graphite**, and **Grafana** show dashboard with your metrics.
+
+Your **Grafana** dashboard is here: [Bot Dashboard](http://localhost:9999/d/bots/telegram-bot-dashboard?refresh=10s&orgId=1)
+
+Example of dashboard view:
+
+![Dashboard screen](/img/dashboard.jpg)
+
+You could read more about this frameworks here:
+* [Logstash doc](https://www.elastic.co/products/logstash)
+* [Graphite doc](https://graphite.readthedocs.io/en/latest/)
+* [Grafana](http://docs.grafana.org/)
