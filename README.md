@@ -16,7 +16,7 @@ Requirements for your environmet:
 
 To create your own bot just follow next steps:
 
-1. Create your bot in Telegram and get bot API key, instructions: [Creating your bot in Telegram](https://github.com/kgribov/TelegramBot#creating_your_bot_in_telegram)
+1. Create your bot in Telegram and get bot API key, instructions: [Creating your bot in Telegram](https://github.com/kgribov/TelegramBot#creating-your-bot-in-telegram)
 1. Clone this repository to your computer: `git clone https://github.com/kgribov/TelegramBot.git`
 1. Go to directory with project: `cd TelegramBot`
 1. Build it using SBT: `sbt docker`
