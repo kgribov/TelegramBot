@@ -16,10 +16,11 @@ lazy val telegramBot = (project in file("."))
       // The assembly task generates a fat JAR file
       val artifact: File = assembly.value
       val artifactTargetPath = s"/app/${artifact.name}"
+      val javaOpts = "$LS_JAVA_OPTS"
       new Dockerfile {
           from("openjdk:8-jre")
           add(artifact, artifactTargetPath)
-          entryPointShell("java", "-jar", artifactTargetPath, "--api-key", "$BOT_API_KEY")
+          entryPointShell("java", "-jar", javaOpts, artifactTargetPath, "--api-key", "$BOT_API_KEY")
       }
     },
     buildOptions in docker := BuildOptions(cache = false)

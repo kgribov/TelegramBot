@@ -1,36 +1,56 @@
-version: '2'
+version: '2.1'
 
 services:
 
-  telegram_bot:
+  telegram-bot:
     image: com.kgribov/telegram-bot
     environment:
       - TZ="UTC-8"
       - BOT_API_KEY
+      - LS_JAVA_OPTS=-Xmx256m -Xms256m
     volumes:
-      - ./logs/:/app/logs
+      - bot-logs:/app/logs
+    networks:
+      - bot-network
+    depends_on:
+      database:
+        condition: service_healthy
+      logstash:
+        condition: service_started
+
+  database:
+    image: postgres
+    environment:
+      - TZ="UTC-8"
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - database-data:/var/lib/postgresql/data
+    networks:
+      - bot-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
 
   logstash:
     build:
       context: logstash/
     volumes:
-      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
-      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
-      - ./logs/:/usr/share/logstash/bot_logs:ro
+      - bot-logs:/usr/share/logstash/bot_logs:ro
     ports:
       - "5000:5000"
     environment:
       TZ: "UTC-8"
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      LS_JAVA_OPTS: "-Xmx128m -Xms128m"
     networks:
       - monitoring
     depends_on:
       - graphite
 
   graphite:
-    image: hopsoft/graphite-statsd
-    volumes:
-      - ./graphite/conf/storage-schemas.conf:/opt/graphite/conf/storage-schemas.conf
+    build:
+      context: graphite/
     ports:
       - "8080:80"
     environment:
@@ -39,10 +59,8 @@ services:
       - monitoring
 
   grafana:
-    image: grafana/grafana
-    volumes:
-      - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
-      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+    build:
+      context: grafana/
     ports:
       - "9999:3000"
     environment:
@@ -55,7 +73,12 @@ services:
     depends_on:
       - logstash
 
+volumes:
+  bot-logs:
+  database-data:
 
 networks:
+  bot-network:
+    driver: bridge
   monitoring:
     driver: bridge
