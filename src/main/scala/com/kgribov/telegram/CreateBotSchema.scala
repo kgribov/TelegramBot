@@ -1,12 +1,12 @@
 package com.kgribov.telegram
 
-import com.kgribov.telegram.dsl._
-import com.kgribov.telegram.process.DialogAnswers
+import com.kgribov.telegram.bot.dialog.Answer
+import com.kgribov.telegram.bot.schema._
 import com.kgribov.telegram.service.RegistrationService
 
 import scala.util.Random
 
-case class CreateBotSchema(apiKey: String) {
+case class CreateBotSchema() {
 
   val botName = "MyNewBot"
 
@@ -17,7 +17,7 @@ case class CreateBotSchema(apiKey: String) {
 
     val registrationService = new RegistrationService
 
-    new BotSchema(apiKey, botName)
+    createBotSchema()
 
       .replyOnCommand("random", _ => Random.nextInt(100).toString)
 
@@ -25,20 +25,22 @@ case class CreateBotSchema(apiKey: String) {
 
       .replyOnCommand("users", _ => registrationService.users().map(_.toMessageFormat()).mkString("\n"))
 
-      .startDialogOnCommand("register", Dialog(questions = Seq(
-        askQuestion(ASK_AGE_QUESTION),
-        askSelectQuestion(ASK_GENDER_QUESTION, Seq("Male", "Female")),
-        submitAnswers(answers => {
+      .startDialogOnCommand("register", DialogSchema(
+        questions = Seq(
+          askQuestion(ASK_AGE_QUESTION),
+          askSelectQuestion(ASK_GENDER_QUESTION, Seq("Male", "Female"))
+        ),
+        submitAnswers = answers => {
           addUser(answers, registrationService)
           "Thanks, user was added!"
         })
-      )))
+      )
   }
 
-  private def addUser(answers: DialogAnswers, registrationService: RegistrationService): Unit = {
-    val gender = answers.allAnswersFromOneUser.getOrElse(ASK_GENDER_QUESTION, "")
-    val age = answers.allAnswersFromOneUser.getOrElse(ASK_AGE_QUESTION, "")
-    val telegramUser = answers.lastAnswersFromUsers.head._1
+  private def addUser(answers: Map[String, Seq[Answer]], registrationService: RegistrationService): Unit = {
+    val gender = answers.get(ASK_GENDER_QUESTION).map(_.head.answer).getOrElse("")
+    val age = answers.get(ASK_AGE_QUESTION).map(_.head.answer).getOrElse("")
+    val telegramUser = answers.head._2.head.fromUser
     registrationService.registerUser(telegramUser, age, gender)
   }
 }

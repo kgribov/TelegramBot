@@ -1,6 +1,6 @@
 package com.kgribov.telegram.service
 
-import com.kgribov.telegram.model.User
+import com.kgribov.telegram.bot.model.User
 import com.typesafe.scalalogging.LazyLogging
 import scalikejdbc._
 
