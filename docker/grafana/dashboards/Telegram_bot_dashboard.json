@@ -204,8 +204,9 @@
       "tableColumn": "",
       "targets": [
         {
+          "refCount": 0,
           "refId": "A",
-          "target": "summarize(telegram.bot.*.metric_text_messages.sum, '1d', 'sum', 'false')"
+          "target": "summarize(telegram.bot.*.metric_text_messages.sum, '1d', 'sum', false)"
         }
       ],
       "thresholds": "",
@@ -499,17 +500,17 @@
         {
           "refCount": 0,
           "refId": "A",
-          "target": "alias(countSeries(telegram.bot.*.metric_unable_load_offset.max), 'Unable to load by offset')"
+          "target": "alias(derivative(keepLastValue(telegram.bot.*.fail_to_load_updates.count, 100)), 'Unable to load by offset')"
         },
         {
           "refCount": 0,
           "refId": "B",
-          "target": "alias(countSeries(telegram.bot.*.metric_unable_get_returnCode.max), 'Unable to get response')"
+          "target": "alias(derivative(keepLastValue(telegram.bot.*.unable_to_send.count, 100)), 'Unable to send replies')"
         },
         {
           "refCount": 0,
           "refId": "C",
-          "target": "countSeries(telegram.bot.*.metric_unable_send_request)"
+          "target": "alias(derivative(keepLastValue(telegram.bot.*.fail_to_request.count, 100)), 'Failed requests')"
         }
       ],
       "thresholds": [],
@@ -557,7 +558,7 @@
     "list": []
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {

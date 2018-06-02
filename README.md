@@ -44,7 +44,7 @@ To discover all bot Scala API features, read documentation in Scala API repo: [A
 
 ## Logging
 
-All logs of your bot you can find in directory `docker/logs`
+TODO
 
 ## Monitoring
 
